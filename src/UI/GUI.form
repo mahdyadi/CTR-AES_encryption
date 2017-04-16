@@ -34,9 +34,9 @@
                   <Component id="KeyPanel" max="32767" attributes="0"/>
                   <Component id="InputPanel" max="32767" attributes="0"/>
                   <Component id="OutputPanel" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jPanel4" alignment="0" max="32767" attributes="0"/>
                   <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
-                  <Component id="InitialValuePanel" alignment="1" max="32767" attributes="0"/>
+                  <Component id="jPanel4" alignment="0" max="32767" attributes="0"/>
+                  <Component id="InitialVectorPanel" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -52,10 +52,10 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="OutputPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
+              <Component id="InitialVectorPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
               <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="InitialValuePanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="126" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -83,7 +83,7 @@
                           <Component id="KeyLengthList" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="167" max="32767" attributes="0"/>
                           <Component id="RandomKeyBtn" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -206,13 +206,13 @@
                           <Component id="FileOutputField" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="FileOutputBtn" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="SameFiletypeCheckbox" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="SameDirCheckbox" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -225,7 +225,7 @@
                       <Component id="FileOutputBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="SameFiletypeCheckbox" min="-2" max="-2" attributes="0"/>
+                  <Component id="SameDirCheckbox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="9" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -242,10 +242,14 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FileOutputBtnActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="SameFiletypeCheckbox">
+        <Component class="javax.swing.JCheckBox" name="SameDirCheckbox">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Same filetype as input"/>
+            <Property name="text" type="java.lang.String" value="Output on the same directory with suffix"/>
+            <Property name="toolTipText" type="java.lang.String" value="Output file will be outputted in the same directory with suffix based on operation choosen (Enc or Dec)"/>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="SameDirCheckboxItemStateChanged"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -255,9 +259,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="InitialValueCheckbox" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="81" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="EncryptBtn" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                   <Component id="DecryptBtn" min="-2" max="-2" attributes="0"/>
@@ -269,12 +271,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace pref="13" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="InitialValueCheckbox" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                          <Component id="EncryptBtn" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="DecryptBtn" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="EncryptBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="DecryptBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -298,14 +297,6 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="DecryptBtnMouseClicked"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="InitialValueCheckbox">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Use custom initial value"/>
-          </Properties>
-          <Events>
-            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="InitialValueCheckboxItemStateChanged"/>
-          </Events>
-        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -324,11 +315,11 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPanel" name="InitialValuePanel">
+    <Container class="javax.swing.JPanel" name="InitialVectorPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Initial Value"/>
+            <TitledBorder title="Initial Vector"/>
           </Border>
         </Property>
       </Properties>
@@ -339,10 +330,10 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="InitialValueField" max="32767" attributes="0"/>
+                      <Component id="InitialVectorField" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          <Component id="InitialValueRandomBtn" min="-2" max="-2" attributes="0"/>
+                          <Component id="InitialVectorRandomBtn" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -353,22 +344,25 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
-                  <Component id="InitialValueField" min="-2" max="-2" attributes="0"/>
+                  <Component id="InitialVectorField" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="InitialValueRandomBtn" min="-2" max="-2" attributes="0"/>
+                  <Component id="InitialVectorRandomBtn" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JTextField" name="InitialValueField">
+        <Component class="javax.swing.JTextField" name="InitialVectorField">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="input 128 bit or 16 byte hex"/>
+          </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="InitialValueRandomBtn">
+        <Component class="javax.swing.JButton" name="InitialVectorRandomBtn">
           <Properties>
             <Property name="text" type="java.lang.String" value="Randomly generate"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="InitialValueRandomBtnMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="InitialVectorRandomBtnMouseClicked"/>
           </Events>
         </Component>
       </SubComponents>

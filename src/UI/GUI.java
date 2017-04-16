@@ -13,6 +13,7 @@ import java.util.Arrays;
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -32,7 +33,6 @@ public class GUI extends javax.swing.JFrame {
         LogField.append("\nCreated by:");
         LogField.append("\nDrianka Mahdy Adimas - 1406572006");
         LogField.append("\nRadhitya Rahman - 1406623335");
-        InitialValuePanel.setVisible(false);
     }
 
     /**
@@ -56,16 +56,15 @@ public class GUI extends javax.swing.JFrame {
         OutputPanel = new javax.swing.JPanel();
         FileOutputField = new javax.swing.JTextField();
         FileOutputBtn = new javax.swing.JButton();
-        SameFiletypeCheckbox = new javax.swing.JCheckBox();
+        SameDirCheckbox = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         EncryptBtn = new javax.swing.JButton();
         DecryptBtn = new javax.swing.JButton();
-        InitialValueCheckbox = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         LogField = new javax.swing.JTextArea();
-        InitialValuePanel = new javax.swing.JPanel();
-        InitialValueField = new javax.swing.JTextField();
-        InitialValueRandomBtn = new javax.swing.JButton();
+        InitialVectorPanel = new javax.swing.JPanel();
+        InitialVectorField = new javax.swing.JTextField();
+        InitialVectorRandomBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CTR-AES");
@@ -95,7 +94,7 @@ public class GUI extends javax.swing.JFrame {
                         .addComponent(KeyLengthList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 167, Short.MAX_VALUE)
                         .addComponent(RandomKeyBtn)))
                 .addContainerGap())
         );
@@ -152,7 +151,13 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        SameFiletypeCheckbox.setText("Same filetype as input");
+        SameDirCheckbox.setText("Output on the same directory with suffix");
+        SameDirCheckbox.setToolTipText("Output file will be outputted in the same directory with suffix based on operation choosen (Enc or Dec)");
+        SameDirCheckbox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                SameDirCheckboxItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout OutputPanelLayout = new javax.swing.GroupLayout(OutputPanel);
         OutputPanel.setLayout(OutputPanelLayout);
@@ -164,11 +169,11 @@ public class GUI extends javax.swing.JFrame {
                     .addGroup(OutputPanelLayout.createSequentialGroup()
                         .addComponent(FileOutputField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(FileOutputBtn)
-                        .addContainerGap())
+                        .addComponent(FileOutputBtn))
                     .addGroup(OutputPanelLayout.createSequentialGroup()
-                        .addComponent(SameFiletypeCheckbox)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(SameDirCheckbox)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         OutputPanelLayout.setVerticalGroup(
             OutputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,7 +183,7 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(FileOutputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(FileOutputBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(SameFiletypeCheckbox)
+                .addComponent(SameDirCheckbox)
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
@@ -196,21 +201,12 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        InitialValueCheckbox.setText("Use custom initial value");
-        InitialValueCheckbox.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                InitialValueCheckboxItemStateChanged(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(InitialValueCheckbox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(EncryptBtn)
                 .addGap(11, 11, 11)
                 .addComponent(DecryptBtn)
@@ -220,11 +216,9 @@ public class GUI extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap(13, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(InitialValueCheckbox, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(EncryptBtn)
-                        .addComponent(DecryptBtn)))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EncryptBtn)
+                    .addComponent(DecryptBtn))
                 .addContainerGap())
         );
 
@@ -233,35 +227,37 @@ public class GUI extends javax.swing.JFrame {
         LogField.setRows(5);
         jScrollPane1.setViewportView(LogField);
 
-        InitialValuePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Initial Value"));
+        InitialVectorPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Initial Vector"));
 
-        InitialValueRandomBtn.setText("Randomly generate");
-        InitialValueRandomBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+        InitialVectorField.setToolTipText("input 128 bit or 16 byte hex");
+
+        InitialVectorRandomBtn.setText("Randomly generate");
+        InitialVectorRandomBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                InitialValueRandomBtnMouseClicked(evt);
+                InitialVectorRandomBtnMouseClicked(evt);
             }
         });
 
-        javax.swing.GroupLayout InitialValuePanelLayout = new javax.swing.GroupLayout(InitialValuePanel);
-        InitialValuePanel.setLayout(InitialValuePanelLayout);
-        InitialValuePanelLayout.setHorizontalGroup(
-            InitialValuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(InitialValuePanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout InitialVectorPanelLayout = new javax.swing.GroupLayout(InitialVectorPanel);
+        InitialVectorPanel.setLayout(InitialVectorPanelLayout);
+        InitialVectorPanelLayout.setHorizontalGroup(
+            InitialVectorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(InitialVectorPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(InitialValuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(InitialValueField)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InitialValuePanelLayout.createSequentialGroup()
+                .addGroup(InitialVectorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(InitialVectorField)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InitialVectorPanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(InitialValueRandomBtn)))
+                        .addComponent(InitialVectorRandomBtn)))
                 .addContainerGap())
         );
-        InitialValuePanelLayout.setVerticalGroup(
-            InitialValuePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(InitialValuePanelLayout.createSequentialGroup()
+        InitialVectorPanelLayout.setVerticalGroup(
+            InitialVectorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(InitialVectorPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(InitialValueField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(InitialVectorField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(InitialValueRandomBtn))
+                .addComponent(InitialVectorRandomBtn))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -274,9 +270,9 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(KeyPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(InputPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(OutputPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1)
-                    .addComponent(InitialValuePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(InitialVectorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -289,25 +285,16 @@ public class GUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(OutputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(InitialVectorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(InitialValuePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void InitialValueCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_InitialValueCheckboxItemStateChanged
-        // TODO add your handling code here:
-        if(InitialValueCheckbox.isSelected()){
-            InitialValuePanel.setVisible(true);
-        } else{
-            InitialValuePanel.setVisible(false);
-        }
-    }//GEN-LAST:event_InitialValueCheckboxItemStateChanged
 
     private void FileInputBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileInputBtnActionPerformed
         // TODO add your handling code here:
@@ -352,19 +339,26 @@ public class GUI extends javax.swing.JFrame {
 
     private void DecryptBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DecryptBtnMouseClicked
         // TODO add your handling code here:
-        byte[] initialValue;
-        if(InitialValueCheckbox.isSelected()){
-            initialValue = DatatypeConverter.parseHexBinary(InitialValueField.getText());        
-        } else{
-            int keyLength = Integer.parseInt(KeyLengthList.getSelectedItem().toString());
-            initialValue = backend.generateBytes((int)Math.floor(keyLength/8));
+        if(InitialVectorField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(
+                    KeyPanel.getParent(),"Initial Vector must be set!",
+                    "Initial Vector is Empty",JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        
+        byte[] initialVector = DatatypeConverter.parseHexBinary(InitialVectorField.getText());
+               
         try{
-            Cipher decryptionCipher = backend.decryptCipher(
-               initialValue, DatatypeConverter.parseHexBinary(KeyInputField.getText()));
+            Cipher decryptionCipher = backend.decryptCipher(initialVector, DatatypeConverter.parseHexBinary(KeyInputField.getText()));
             File input = new File(FileInputField.getText());
-            File output = new File(FileOutputField.getText());
+            File output;
+            if(SameDirCheckbox.isSelected()){
+                String[] name = input.getName().split("\\.");
+                System.out.println(input.getName());
+                output = new File(input.getAbsolutePath()+".dec."+name[name.length-2]);
+                LogField.append("\nSet Output to: "+output.getAbsolutePath()+".");
+            } else{
+                output = new File(FileOutputField.getText());
+            }
             FileInputStream fis = new FileInputStream(input);
             CipherOutputStream cos = new CipherOutputStream(
                     new FileOutputStream(output,false),decryptionCipher);
@@ -391,18 +385,25 @@ public class GUI extends javax.swing.JFrame {
 
     private void EncryptBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EncryptBtnMouseClicked
         // TODO add your handling code here:
-        byte[] initialValue;
-        if(InitialValueCheckbox.isSelected()){
-            initialValue = DatatypeConverter.parseHexBinary(InitialValueField.getText());        
-        } else{
-            int keyLength = Integer.parseInt(KeyLengthList.getSelectedItem().toString());
-            initialValue = backend.generateBytes((int)Math.floor(keyLength/8));
+        if(InitialVectorField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(
+                    KeyPanel.getParent(),"Initial Vector must be set!",
+                    "Initial Vector is Empty",JOptionPane.WARNING_MESSAGE);
+            return;
         }
+        byte[] initialVector = DatatypeConverter.parseHexBinary(InitialVectorField.getText());
+       
         try{
-            Cipher encryptionCipher = backend.encryptCipher(
-               initialValue, DatatypeConverter.parseHexBinary(KeyInputField.getText()));
+            Cipher encryptionCipher = backend.encryptCipher(initialVector, DatatypeConverter.parseHexBinary(KeyInputField.getText()));
             File input = new File(FileInputField.getText());
-            File output = new File(FileOutputField.getText());
+            File output;
+            if(SameDirCheckbox.isSelected()){
+                output = new File(input.getAbsolutePath()+".enc");
+                LogField.append("\nSet Output to: "+output.getAbsolutePath()+".");
+            } else{
+                output = new File(FileOutputField.getText());
+            }
+           
             FileInputStream fis = new FileInputStream(input);
             CipherOutputStream cos = new CipherOutputStream(
                     new FileOutputStream(output,false),encryptionCipher);
@@ -427,12 +428,12 @@ public class GUI extends javax.swing.JFrame {
         } 
     }//GEN-LAST:event_EncryptBtnMouseClicked
 
-    private void InitialValueRandomBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_InitialValueRandomBtnMouseClicked
+    private void InitialVectorRandomBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_InitialVectorRandomBtnMouseClicked
         // TODO add your handling code here:
-        int keyLength = Integer.parseInt(KeyLengthList.getSelectedItem().toString());
+        int keyLength = 128;
         byte[] key = backend.generateBytes((int)Math.floor(keyLength/8));
         String keyHex = DatatypeConverter.printHexBinary(key);
-        InitialValueField.setText(keyHex);
+        InitialVectorField.setText(keyHex);
         LogField.append("\nRandom IV generated.");
         LogField.append("\n"+key.length+" byte generated.");
         LogField.append("\n"+keyHex.length()+" long hex string shown converted from key bytes.");
@@ -442,7 +443,21 @@ public class GUI extends javax.swing.JFrame {
         } else{
             LogField.append("\nproblem with converting keys");
         }
-    }//GEN-LAST:event_InitialValueRandomBtnMouseClicked
+    }//GEN-LAST:event_InitialVectorRandomBtnMouseClicked
+
+    private void SameDirCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_SameDirCheckboxItemStateChanged
+        // TODO add your handling code here:
+        if(SameDirCheckbox.isSelected()){
+            FileOutputField.setText("");
+            FileOutputField.setEditable(false);
+            FileOutputField.setEnabled(false);
+            FileOutputBtn.setEnabled(false);
+        } else{
+            FileOutputField.setEnabled(true);
+            FileOutputField.setEditable(true);
+            FileOutputBtn.setEnabled(true);
+        }
+    }//GEN-LAST:event_SameDirCheckboxItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -487,10 +502,9 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField FileInputField;
     private javax.swing.JButton FileOutputBtn;
     private javax.swing.JTextField FileOutputField;
-    private javax.swing.JCheckBox InitialValueCheckbox;
-    private javax.swing.JTextField InitialValueField;
-    private javax.swing.JPanel InitialValuePanel;
-    private javax.swing.JButton InitialValueRandomBtn;
+    private javax.swing.JTextField InitialVectorField;
+    private javax.swing.JPanel InitialVectorPanel;
+    private javax.swing.JButton InitialVectorRandomBtn;
     private javax.swing.JPanel InputPanel;
     private javax.swing.JTextField KeyInputField;
     private javax.swing.JComboBox<String> KeyLengthList;
@@ -498,7 +512,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextArea LogField;
     private javax.swing.JPanel OutputPanel;
     private javax.swing.JButton RandomKeyBtn;
-    private javax.swing.JCheckBox SameFiletypeCheckbox;
+    private javax.swing.JCheckBox SameDirCheckbox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
