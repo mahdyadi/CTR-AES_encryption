@@ -6,9 +6,11 @@ package UI;
  * and open the template in the editor.
  */
 import aeswithctr.AESWithCTR;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.util.Arrays;
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
@@ -45,11 +47,6 @@ public class GUI extends javax.swing.JFrame {
     private void initComponents() {
 
         FileChooser = new javax.swing.JFileChooser();
-        KeyPanel = new javax.swing.JPanel();
-        KeyLengthList = new javax.swing.JComboBox<>();
-        KeyInputField = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        RandomKeyBtn = new javax.swing.JButton();
         InputPanel = new javax.swing.JPanel();
         FileInputField = new javax.swing.JTextField();
         FileInputBtn = new javax.swing.JButton();
@@ -65,51 +62,24 @@ public class GUI extends javax.swing.JFrame {
         InitialVectorPanel = new javax.swing.JPanel();
         InitialVectorField = new javax.swing.JTextField();
         InitialVectorRandomBtn = new javax.swing.JButton();
+        KeyTabbedPanel = new javax.swing.JTabbedPane();
+        KeyFilePanel = new javax.swing.JPanel();
+        KeyFileInputField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        KeyLengthListFile = new javax.swing.JComboBox<>();
+        KeyFromFileBrowseBtn = new javax.swing.JButton();
+        KeyPanel = new javax.swing.JPanel();
+        KeyLengthList = new javax.swing.JComboBox<>();
+        RandomKeyBtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        KeyInputField = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CTR-AES");
-
-        KeyPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Key"));
-
-        KeyLengthList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "128", "192", "256" }));
-
-        jLabel1.setText("bit");
-
-        RandomKeyBtn.setText("Randomly generate");
-        RandomKeyBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                RandomKeyBtnMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout KeyPanelLayout = new javax.swing.GroupLayout(KeyPanel);
-        KeyPanel.setLayout(KeyPanelLayout);
-        KeyPanelLayout.setHorizontalGroup(
-            KeyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(KeyPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(KeyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(KeyInputField)
-                    .addGroup(KeyPanelLayout.createSequentialGroup()
-                        .addComponent(KeyLengthList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 167, Short.MAX_VALUE)
-                        .addComponent(RandomKeyBtn)))
-                .addContainerGap())
-        );
-        KeyPanelLayout.setVerticalGroup(
-            KeyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(KeyPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(KeyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(KeyLengthList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(RandomKeyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(KeyInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
 
         InputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Input file"));
         InputPanel.setName(""); // NOI18N
@@ -260,36 +230,166 @@ public class GUI extends javax.swing.JFrame {
                 .addComponent(InitialVectorRandomBtn))
         );
 
+        jLabel2.setText("bit");
+
+        KeyLengthListFile.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "128", "192", "256" }));
+
+        KeyFromFileBrowseBtn.setText("Browse");
+        KeyFromFileBrowseBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                KeyFromFileBrowseBtnMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout KeyFilePanelLayout = new javax.swing.GroupLayout(KeyFilePanel);
+        KeyFilePanel.setLayout(KeyFilePanelLayout);
+        KeyFilePanelLayout.setHorizontalGroup(
+            KeyFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(KeyFilePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(KeyFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(KeyFileInputField)
+                    .addGroup(KeyFilePanelLayout.createSequentialGroup()
+                        .addComponent(KeyLengthListFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)
+                        .addComponent(KeyFromFileBrowseBtn)))
+                .addContainerGap())
+        );
+        KeyFilePanelLayout.setVerticalGroup(
+            KeyFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, KeyFilePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(KeyFilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(KeyLengthListFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(KeyFromFileBrowseBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(KeyFileInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        KeyTabbedPanel.addTab("Key from file", KeyFilePanel);
+
+        KeyLengthList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "128", "192", "256" }));
+
+        RandomKeyBtn.setText("Randomly generate");
+        RandomKeyBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                RandomKeyBtnMouseClicked(evt);
+            }
+        });
+
+        jLabel1.setText("bit");
+
+        javax.swing.GroupLayout KeyPanelLayout = new javax.swing.GroupLayout(KeyPanel);
+        KeyPanel.setLayout(KeyPanelLayout);
+        KeyPanelLayout.setHorizontalGroup(
+            KeyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(KeyPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(KeyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(KeyInputField)
+                    .addGroup(KeyPanelLayout.createSequentialGroup()
+                        .addComponent(KeyLengthList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                        .addComponent(RandomKeyBtn)))
+                .addContainerGap())
+        );
+        KeyPanelLayout.setVerticalGroup(
+            KeyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(KeyPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(KeyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(KeyLengthList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RandomKeyBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(KeyInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        KeyTabbedPanel.addTab("Key from text", KeyPanel);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Image"));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 302, Short.MAX_VALUE)
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Hex"));
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane2.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(KeyPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(InputPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(KeyTabbedPanel)
                     .addComponent(OutputPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(InitialVectorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(InitialVectorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(KeyPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(InputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(OutputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(InitialVectorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(KeyTabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(InputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(OutputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(InitialVectorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -299,7 +399,7 @@ public class GUI extends javax.swing.JFrame {
     private void FileInputBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileInputBtnActionPerformed
         // TODO add your handling code here:
         FileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        int returnVal = FileChooser.showOpenDialog(KeyPanel.getParent());
+        int returnVal = FileChooser.showOpenDialog(KeyTabbedPanel.getParent());
         if(returnVal == JFileChooser.APPROVE_OPTION){
             FileInputField.setText(FileChooser.getSelectedFile().getAbsolutePath());
             LogField.append("\nSet as input: "+FileChooser.getSelectedFile().getName()+".");
@@ -328,7 +428,7 @@ public class GUI extends javax.swing.JFrame {
     private void FileOutputBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FileOutputBtnActionPerformed
         // TODO add your handling code here:
         FileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        int returnVal = FileChooser.showSaveDialog(KeyPanel.getParent());
+        int returnVal = FileChooser.showSaveDialog(KeyTabbedPanel.getParent());
         if(returnVal == JFileChooser.APPROVE_OPTION){
             FileOutputField.setText(FileChooser.getSelectedFile().getAbsolutePath());
             LogField.append("\nSet as Output: "+FileChooser.getSelectedFile().getName()+".");
@@ -338,18 +438,39 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_FileOutputBtnActionPerformed
 
     private void DecryptBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DecryptBtnMouseClicked
-        // TODO add your handling code here:
-        if(InitialVectorField.getText().isEmpty()){
+        // TODO add your handling code here:   
+        String ivInput = InitialVectorField.getText();
+        if(ivInput.isEmpty()){
             JOptionPane.showMessageDialog(
                     KeyPanel.getParent(),"Initial Vector must be set!",
                     "Initial Vector is Empty",JOptionPane.WARNING_MESSAGE);
             return;
+        } else if(ivInput.length() != 32){
+            JOptionPane.showMessageDialog(
+                    KeyPanel.getParent(),"Initial Vector must be 128 bits",
+                    "Initial Vector is not valid",JOptionPane.WARNING_MESSAGE);
+            return;
         }
         byte[] initialVector = DatatypeConverter.parseHexBinary(InitialVectorField.getText());
-               
+       
         try{
-            Cipher decryptionCipher = backend.decryptCipher(initialVector, DatatypeConverter.parseHexBinary(KeyInputField.getText()));
+            Cipher decryptionCipher;
+            String keyInput;
+            if(KeyTabbedPanel.getSelectedIndex() == 0){
+                File keyFile = new File(KeyFileInputField.getText());
+                BufferedReader br = new BufferedReader(new FileReader(keyFile));
+                keyInput = br.readLine();
+            } else{
+                keyInput = KeyInputField.getText();
+            }
+            decryptionCipher = backend.decryptCipher(initialVector, DatatypeConverter.parseHexBinary(keyInput));
             File input = new File(FileInputField.getText());
+            if(!input.exists()){
+                JOptionPane.showMessageDialog(
+                    KeyPanel.getParent(),"Input file not found",
+                    "Decryption failed",JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             File output;
             if(SameDirCheckbox.isSelected()){
                 String[] name = input.getName().split("\\.");
@@ -358,6 +479,12 @@ public class GUI extends javax.swing.JFrame {
                 LogField.append("\nSet Output to: "+output.getAbsolutePath()+".");
             } else{
                 output = new File(FileOutputField.getText());
+            }
+            if(output.getName().equals("")){
+                JOptionPane.showMessageDialog(
+                    KeyPanel.getParent(),"Output file cannot be empty",
+                    "Encryption failed",JOptionPane.WARNING_MESSAGE);
+                return;
             }
             FileInputStream fis = new FileInputStream(input);
             CipherOutputStream cos = new CipherOutputStream(
@@ -375,9 +502,12 @@ public class GUI extends javax.swing.JFrame {
             }
             fis.close();
             cos.close();
-            LogField.append("\nDecryption done.");
+            LogField.append("\nEncryption done.");
         }catch(Exception e){
-            LogField.append("\nDecryption failed.");
+            LogField.append("\nEncryption failed.");
+            JOptionPane.showMessageDialog(
+                    KeyPanel.getParent(),e.getMessage(),
+                    "Encryption failed",JOptionPane.WARNING_MESSAGE);
             LogField.append("\n"+e.getMessage());
             e.printStackTrace();
         } 
@@ -385,17 +515,38 @@ public class GUI extends javax.swing.JFrame {
 
     private void EncryptBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EncryptBtnMouseClicked
         // TODO add your handling code here:
-        if(InitialVectorField.getText().isEmpty()){
+        String ivInput = InitialVectorField.getText();
+        if(ivInput.isEmpty()){
             JOptionPane.showMessageDialog(
                     KeyPanel.getParent(),"Initial Vector must be set!",
                     "Initial Vector is Empty",JOptionPane.WARNING_MESSAGE);
+            return;
+        } else if(ivInput.length() != 32){
+            JOptionPane.showMessageDialog(
+                    KeyPanel.getParent(),"Initial Vector must be 128 bits",
+                    "Initial Vector is not valid",JOptionPane.WARNING_MESSAGE);
             return;
         }
         byte[] initialVector = DatatypeConverter.parseHexBinary(InitialVectorField.getText());
        
         try{
-            Cipher encryptionCipher = backend.encryptCipher(initialVector, DatatypeConverter.parseHexBinary(KeyInputField.getText()));
+            Cipher encryptionCipher;
+            String keyInput;
+            if(KeyTabbedPanel.getSelectedIndex() == 0){
+                File keyFile = new File(KeyFileInputField.getText());
+                BufferedReader br = new BufferedReader(new FileReader(keyFile));
+                keyInput = br.readLine();
+            } else{
+                keyInput = KeyInputField.getText();
+            }
+            encryptionCipher = backend.encryptCipher(initialVector, DatatypeConverter.parseHexBinary(keyInput));
             File input = new File(FileInputField.getText());
+            if(!input.exists()){
+                JOptionPane.showMessageDialog(
+                    KeyPanel.getParent(),"Input file not found",
+                    "Encryption failed",JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             File output;
             if(SameDirCheckbox.isSelected()){
                 output = new File(input.getAbsolutePath()+".enc");
@@ -403,7 +554,12 @@ public class GUI extends javax.swing.JFrame {
             } else{
                 output = new File(FileOutputField.getText());
             }
-           
+            if(output.getName().equals("")){
+                JOptionPane.showMessageDialog(
+                    KeyPanel.getParent(),"Output file cannot be empty",
+                    "Encryption failed",JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             FileInputStream fis = new FileInputStream(input);
             CipherOutputStream cos = new CipherOutputStream(
                     new FileOutputStream(output,false),encryptionCipher);
@@ -423,6 +579,9 @@ public class GUI extends javax.swing.JFrame {
             LogField.append("\nEncryption done.");
         }catch(Exception e){
             LogField.append("\nEncryption failed.");
+            JOptionPane.showMessageDialog(
+                    KeyPanel.getParent(),e.getMessage(),
+                    "Encryption failed",JOptionPane.WARNING_MESSAGE);
             LogField.append("\n"+e.getMessage());
             e.printStackTrace();
         } 
@@ -436,12 +595,12 @@ public class GUI extends javax.swing.JFrame {
         InitialVectorField.setText(keyHex);
         LogField.append("\nRandom IV generated.");
         LogField.append("\n"+key.length+" byte generated.");
-        LogField.append("\n"+keyHex.length()+" long hex string shown converted from key bytes.");
+        LogField.append("\n"+keyHex.length()+" long hex string shown converted from IV bytes.");
         byte[] key2 = DatatypeConverter.parseHexBinary(keyHex);
         if(Arrays.equals(key, key2)){
-            LogField.append("\nNo problem with keys");
+            LogField.append("\nNo problem with IV");
         } else{
-            LogField.append("\nproblem with converting keys");
+            LogField.append("\nproblem with converting IV");
         }
     }//GEN-LAST:event_InitialVectorRandomBtnMouseClicked
 
@@ -459,16 +618,29 @@ public class GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_SameDirCheckboxItemStateChanged
 
+    private void KeyFromFileBrowseBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_KeyFromFileBrowseBtnMouseClicked
+        // TODO add your handling code here:
+        FileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        int returnVal = FileChooser.showOpenDialog(KeyTabbedPanel.getParent());
+        if(returnVal == JFileChooser.APPROVE_OPTION){
+            KeyFileInputField.setText(FileChooser.getSelectedFile().getAbsolutePath());
+            LogField.append("\nSet as key input: "+FileChooser.getSelectedFile().getName()+".");
+        } else {
+            LogField.append("\nCancelling set key file.");
+        }
+    }//GEN-LAST:event_KeyFromFileBrowseBtnMouseClicked
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
+        
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
+        /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -483,8 +655,9 @@ public class GUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        }*/
         //</editor-fold>
+        
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -506,15 +679,25 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel InitialVectorPanel;
     private javax.swing.JButton InitialVectorRandomBtn;
     private javax.swing.JPanel InputPanel;
+    private javax.swing.JTextField KeyFileInputField;
+    private javax.swing.JPanel KeyFilePanel;
+    private javax.swing.JButton KeyFromFileBrowseBtn;
     private javax.swing.JTextField KeyInputField;
     private javax.swing.JComboBox<String> KeyLengthList;
+    private javax.swing.JComboBox<String> KeyLengthListFile;
     private javax.swing.JPanel KeyPanel;
+    private javax.swing.JTabbedPane KeyTabbedPanel;
     private javax.swing.JTextArea LogField;
     private javax.swing.JPanel OutputPanel;
     private javax.swing.JButton RandomKeyBtn;
     private javax.swing.JCheckBox SameDirCheckbox;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
